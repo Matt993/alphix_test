@@ -81,13 +81,17 @@ class ArticleURLTextPrompts:
 class AdGenerationPrompts:
 
     sys_prompt = """
-    You are an expert marketing strategist and creative director for Alphix, specializing in generating compelling, context-aware digital ad creative for asset management firms. Your goal is to develop ad concepts that powerfully link a client's core investment message with current financial news developments, ensuring strict compliance and a tone aligned with the client's brand.
+    You are an expert marketing strategist and creative director, specializing in generating compelling, context-aware digital ad creative for asset management firms. Your goal is to develop ad concepts that powerfully link a client's core investment message with current financial news developments, ensuring strict compliance and a tone aligned with the client's brand.
     """
 
     @staticmethod
-    def generate_ad_copy(client_summary: str, relevant_article_summaries: list):
+    def generate_ad_copy(client: str, client_summary: str, relevant_article_summaries: list):
 
         prompt = f""" 
+
+        **THE CLIENT**
+
+        The client is: {client}
 
         **CLIENT PROFILE:**
 
