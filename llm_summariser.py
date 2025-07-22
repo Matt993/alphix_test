@@ -38,20 +38,19 @@ class LLMSummariser:
             "Authorization": f"Bearer {LLMSummariser.OPENAI_API_KEY}"},
                 json=data)
         
-        json_str = response.json()['choices'][0]['message']['content'].split('```json\n')[1].split('\n```')[0]
+        json_str = response.json()['choices'][0]['message']['content'].split('```json\n')[-1].split('\n```')[0]
         data_dict = json.loads(json_str)
 
         return data_dict
     
-    def summarise_df(self, df: pd.DataFrame, max_workers: int=5) -> pd.DataFrame:
+    def summarise_df(self, df: pd.DataFrame, max_workers: int = 5) -> pd.DataFrame:
         """Summarise articles concurrently for dataframe containing `txt_body` col."""
         assert "txt_body" in df.columns, "'txt_body' col must be in df columns."
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = [executor.submit(
-                self.summarise_txt,
-                ArticleURLTextPrompts.sys_prompt, ArticleURLTextPrompts.summarise_article_prompt(txt_body)
-                ) for txt_body in df["txt_body"]]
-            results = [future.result() for future in concurrent.futures.as_completed(futures)]
-
+            results = list(executor.map(
+                lambda txt: self.summarise_txt(
+                    ArticleURLTextPrompts.sys_prompt, ArticleURLTextPrompts.summarise_article_prompt(txt)
+                ), df["txt_body"]
+            ))
         df['summary'] = results
         return df
