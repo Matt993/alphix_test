@@ -72,6 +72,9 @@ class ArticleURLTextPrompts:
             "sentiment_analysis": "..."
             }}
             ```
+            Note: If the the news article has been webscraped, some of the articles are behind a paywall or have prevented
+            the article being scraped. In such cases they return text along the lines of: "We've detected unusual activity from your computer..."
+            or "temporary error...". If this is the case, return empty values in the json output.
             """
         return prompt
     
