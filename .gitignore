@@ -1,0 +1,6 @@
+env/
+*.pickle
+*.csv
+*.pyc
+.DS_Store
+*.xlsx
