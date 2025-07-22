@@ -11,10 +11,10 @@ class ArticleEmbeddingSearch:
         self.article_summaries = article_summaries
         self.article_embeddings = self._store_articles(article_summaries)
 
-    def _store_articles(self, article_summaries: list[str]) -> None:
+    def _store_articles(self, article_summaries: list[str]) -> list:
         """Store article summaries as embeddings."""
         article_embeddings = self.model.encode(article_summaries)
-        self.article_embeddings = article_embeddings.tolist()
+        return article_embeddings.tolist()
 
     def search(self, query_str: str, top_k: int = 5) -> list:
         """Search for top k most relevant articles."""
