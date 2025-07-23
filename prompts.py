@@ -124,9 +124,9 @@ class AdGenerationPrompts:
             * **Headline:** Max 10 words.
             * **Main Copy:** Max 50 words.
             * **Call to Action (CTA):** Standard LinkedIn CTAs (e.g., "Learn More", "Download Whitepaper", "Visit Website").
-            * **Image Suggestion:** Detailed description (aim for DALL-E/Midjourney prompt quality).
+            * **Image Suggestion:** Detailed description (A prompt that will work well for DALL-E-3 image generation).
 
-        **2. Banner Ad (e.g., 728x90 or 300x250):**
+        **2. Banner Ad:**
             * **Headline:** Max 7 words. Very concise.
             * **Main Copy:** Max 20 words (optional, if space allows).
             * **CTA:** Short and punchy.
