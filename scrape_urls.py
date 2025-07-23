@@ -7,7 +7,7 @@ from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 
 class ScrapeURLs:
-
+    """Class for scraping URLs from a given .xlsx file"""
     def __init__(self, xlsx_sheet: str):
         self.xlsx_file = pd.ExcelFile(xlsx_sheet)
         self.sheet_names = self.xlsx_file.sheet_names
@@ -16,7 +16,7 @@ class ScrapeURLs:
 
 
     def read_client_urls(self) -> list:
-
+        """Reads the client URLs found at the top of the xlsx sheet."""
         client_landing_urls = []
         
         for sheet_name in self.sheet_names:
@@ -26,7 +26,7 @@ class ScrapeURLs:
         return client_landing_urls
     
     def webscrape_client_urls(self) -> dict:
-
+        """Webscrape client urls with triafilatura."""
         client_urls_txt = {}
 
         for client_url in self.client_urls:
@@ -34,10 +34,12 @@ class ScrapeURLs:
         return client_urls_txt
     
     async def webscrape_relevant_docs(self, sheet_name: str) -> None:
+        """Webscrape relevant articles using triafilatura, if that fails uses Playwright and parses with Beautiful Soup."""
         docs_df = self.xlsx_file.parse(sheet_name=sheet_name)[2:]
         docs_df.columns = docs_df.iloc[0] # Assign Title, Source, Published Date, URL to column headers
         docs_df.drop([docs_df.index[0], docs_df.index[-1]], inplace=True)
         docs_df.reset_index(drop=True, inplace=True)
+
         for url in docs_df["URL"]:
 
             txt_body = trafilatura.extract(trafilatura.fetch_url(url), url=url)
@@ -66,26 +68,22 @@ class ScrapeURLs:
         html_content = None
         try:
             async with async_playwright() as p:
-                browser = await p.chromium.launch() # Use await
-                page = await browser.new_page()     # Use await
+                browser = await p.chromium.launch()
+                page = await browser.new_page()
                 
                 print(f"Attempting to navigate to: {url} with Playwright (Async)")
-                await page.goto(url, wait_until='domcontentloaded', timeout=60000) # Use await
+                await page.goto(url, wait_until='domcontentloaded', timeout=60000)
 
                 if wait_for_selector:
-                    print(f"Waiting for selector: '{wait_for_selector}'")
                     try:
-                        await page.wait_for_selector(wait_for_selector, state='attached', timeout=30000) # Use await
+                        await page.wait_for_selector(wait_for_selector, state='attached', timeout=30000)
                     except Exception as e:
-                        print(f"Warning: Selector '{wait_for_selector}' not found or timed out. Proceeding anyway. Error: {e}")
-                        await asyncio.sleep(wait_time_seconds) # Use asyncio.sleep in async code
+                        await asyncio.sleep(wait_time_seconds)
                 else:
-                    print(f"Waiting for {wait_time_seconds} seconds for content to load.")
-                    await asyncio.sleep(wait_time_seconds) # Use asyncio.sleep
+                    await asyncio.sleep(wait_time_seconds)
 
-                html_content = await page.content() # Use await
-                print(f"Successfully retrieved rendered HTML from: {url}")
-                await browser.close() # Use await
+                html_content = await page.content()
+                await browser.close()
         except Exception as e:
             print(f"An error occurred while using Playwright (Async) on {url}: {e}")
             return None
@@ -116,7 +114,6 @@ class ScrapeURLs:
         if not main_content_div:
             main_content_div = soup.find('body')
             if not main_content_div:
-                print("Could not find a suitable main content div within the rendered HTML.")
                 return None
 
         for unwanted_tag in ['nav', 'header', 'footer', 'aside', 'form', 'script', 'style', 'img', 'link', 'figure', 'figcaption', 'noscript', 'meta', '.ads-container', '.promo', '.social-share-bar']:
