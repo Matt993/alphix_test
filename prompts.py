@@ -3,14 +3,17 @@ class ClientLandingPagePrompts:
     sys_prompt = """
         You are an AI assistant specialised in analysing financial services content. 
         Your task is to extract key information from the provided client landing page 
-        text to build a comprehensive understanding of their offering and messaging.
+        and their About Us page to build a comprehensive understanding of their offering and messaging.
     """
 
     @staticmethod
-    def summarise_client_message(landing_page_txt: str) -> dict:
+    def summarise_client_message(landing_page_txt: str, about_us_txt: str) -> dict:
         prompt = f"""
             **Client Landing Page Text:**
             {landing_page_txt}
+
+            **Client About Us Text:**
+            {about_us_txt}
 
             ---
 
