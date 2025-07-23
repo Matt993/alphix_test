@@ -122,6 +122,12 @@ class AdGenerationPrompts:
 
         ---
 
+        **AD TYPE DESCRIPTIONS:**
+
+        LinkedIn Single Image Ad: A single image ad is a form of online advertisement that utilizes a single static image, along with accompanying text like a headline, description, and call-to-action (CTA), to engage an audience.
+        Banner Ad: A banner ad is a type of online advertisement, typically rectangular, that appears on web pages to attract users and drive traffic to the advertiser's website. These ads often feature a combination of visuals and a call to action.
+        Carousel Ad: A carousel ad is an online advertising format that displays multiple images or videos within a single ad unit, allowing users to swipe or click through to view different content.
+
         **AD FORMATS & REQUIREMENTS:**
 
         **1. LinkedIn Single Image Ad:**
@@ -151,6 +157,8 @@ class AdGenerationPrompts:
                 * Copy: Max 30 words.
                 * Image Suggestion: Description.
             * **Overall CTA:** One final CTA for the entire carousel.
+            
+            NOTE: You *must* the different slides all relate to one another and the sequence of images follow each other naturally.
 
         **4. Display Creative (General Web Display):**
             * **Headline:** Max 15 words.
