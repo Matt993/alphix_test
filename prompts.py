@@ -117,7 +117,8 @@ class AdGenerationPrompts:
         1.  **Linkage:** Explicitly link the client's message with the news context. The ad should resonate with what's happening now, while promoting the client's solutions.
         2.  **Tone & Compliance:** Maintain the client's `Brand Tone & Style` and strictly adhere to their `Compliance Sensitivities`.
         3.  **Clarity & Conciseness:** Ad copy should be direct and impactful, appropriate for each format.
-        4.  **Imagery:** Suggest vivid, eye-catching and relevant imagery that complements the ad concept and the tone of the client's brand.
+        4.  **Imagery:** Provide a scene-level visual concept as a DALL·E 3 prompt, using concrete, specific elements. Avoid abstract symbols (e.g., globes, arrows, stock metaphors). 
+        Imagine a still frame from a film or documentary that embodies the idea in a real-world setting. Avoid repeating the same imagery concept (e.g., a globe or handshake) across formats. Each format should feature distinct visual storytelling aligned with its message.
 
         ---
 
