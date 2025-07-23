@@ -11,11 +11,11 @@ class ScrapeURLs:
     def __init__(self, xlsx_sheet: str):
         self.xlsx_file = pd.ExcelFile(xlsx_sheet)
         self.sheet_names = self.xlsx_file.sheet_names
-        self.client_urls = self.read_client_urls()
+        self.client_urls = self._read_client_urls()
         self.sheets = {}
 
 
-    def read_client_urls(self) -> list:
+    def _read_client_urls(self) -> list:
         """Reads the client URLs found at the top of the xlsx sheet."""
         client_landing_urls = []
         
@@ -31,8 +31,17 @@ class ScrapeURLs:
 
         for client_url in self.client_urls:
             client_urls_txt[client_url] = trafilatura.extract(trafilatura.fetch_url(client_url), url=client_url)
+
         return client_urls_txt
     
+    def webscrape_client_about_us_urls(self, about_us_urls: list) -> dict:
+        client_about_us_text = {}
+
+        for about_us_url in about_us_urls:
+            client_about_us_text[about_us_url] = trafilatura.extract(trafilatura.fetch_url(about_us_url), url=about_us_url)
+
+        return client_about_us_text
+
     async def webscrape_relevant_docs(self, sheet_name: str) -> None:
         """Webscrape relevant articles using triafilatura, if that fails uses Playwright and parses with Beautiful Soup."""
         docs_df = self.xlsx_file.parse(sheet_name=sheet_name)[2:]
@@ -70,8 +79,6 @@ class ScrapeURLs:
             async with async_playwright() as p:
                 browser = await p.chromium.launch()
                 page = await browser.new_page()
-                
-                print(f"Attempting to navigate to: {url} with Playwright (Async)")
                 await page.goto(url, wait_until='domcontentloaded', timeout=60000)
 
                 if wait_for_selector:
