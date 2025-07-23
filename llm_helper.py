@@ -1,7 +1,6 @@
 """Module for summarising text data with an LLM."""
 import os
 import json
-import requests
 import openai
 import concurrent.futures
 
@@ -56,10 +55,10 @@ class LLMHelper:
                 response = self.client.images.generate(
                     model=self.image_model,
                     prompt=slide["imagery_suggestion"],
-                    n=1,
+                    n=n_ads,
                     size=size
                 )
-                slides.append(response.data[0].url, slide)
+                slides.append((response.data[0].url, slide))
             return slides
 
         response = self.client.images.generate(
